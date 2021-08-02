@@ -45,12 +45,15 @@ public class CodeGenerator {
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("chengtao");
         gc.setOpen(false);
+        gc.setFileOverride(false);
+        gc.setBaseColumnList(true);
+        gc.setBaseResultMap(true);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/hitest?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://localhost:3306/bitwells?useUnicode=true&useSSL=false&characterEncoding=utf8");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
@@ -113,6 +116,7 @@ public class CodeGenerator {
         // templateConfig.setEntity("templates/entity2.java");
 //         templateConfig.setService();
 //         templateConfig.setController();
+        templateConfig.disable(TemplateType.CONTROLLER);
 
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
@@ -126,11 +130,20 @@ public class CodeGenerator {
         strategy.setSuperEntityColumns("");
         strategy.setEntityLombokModel(false);
         strategy.setRestControllerStyle(true);
+        strategy.setEntityColumnConstant(true);
+
+        strategy.setEntityLombokModel(false);
+        strategy.setChainModel(false);
+
+        strategy.setEntityTableFieldAnnotationEnable(true);
+
         // 公共父类
         strategy.setSuperControllerClass(""); //你自己的父类控制器,没有就不用设置!
-        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+//        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+        strategy.setExclude();
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setTablePrefix("bw_");
+        strategy.setFieldPrefix("cs_");
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new VelocityTemplateEngine());
         mpg.execute();
